@@ -1,9 +1,25 @@
-import React from 'react'
+import { UsersArrayProps } from "../../components/props/props";
 
-const GithubReducer = () => {
-  return (
-    <div>GithubReducer</div>
-  )
+type Action = {
+  type: string;
 }
 
-export default GithubReducer
+interface userState {
+  user: UsersArrayProps;
+  isLoading: boolean;
+}
+
+const githubReducer = (state:userState, action:Action) => {
+  switch(action.type) {
+    case 'GET_USERS':
+      return {
+        ...state,
+        users: action.payload,
+        isLoading: false
+      }
+    default: 
+      return state
+  }
+}
+
+export default githubReducer
