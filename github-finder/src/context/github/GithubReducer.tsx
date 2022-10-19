@@ -1,12 +1,22 @@
-import { UsersArrayProps } from "../../components/props/props";
+
 
 export type Action = {
   type: string;
   payload: UsersArrayProps[];
 }
 
+export interface UserProps{
+  login: string;
+}
+
+export interface UsersArrayProps {
+  id: number | null;
+  login: string;
+  avatar_url: string;
+}
 export interface User_LoaderState {
   users: UsersArrayProps[];
+  user: UserProps | object;
   isLoading: boolean;
 }
 

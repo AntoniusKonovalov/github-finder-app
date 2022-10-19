@@ -1,6 +1,5 @@
 import { createContext, useReducer } from 'react'
-import { UsersArrayProps } from '../../components/props/props'
-import githubReducer, { User_LoaderState } from './GithubReducer';
+import githubReducer, { UsersArrayProps, User_LoaderState } from './GithubReducer';
 
 export type GithubContextType = {
   users: UsersArrayProps[];
@@ -18,6 +17,7 @@ export const GithubContextProvider = ({children}:any) => {
 
   const initialState:User_LoaderState = {
     users: [],
+    user: {},
     isLoading: false
   }
 
@@ -41,6 +41,28 @@ export const GithubContextProvider = ({children}:any) => {
     })
   }
 
+    // Get single user
+    const getUser = async(login:string) => {
+      setLoading()
+      const response = await fetch(`${GITHUB_URL}/users/${login}`, {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`
+        }
+      })
+
+      if(response.status === 404) {
+        window.location = '/notfound'
+      } else {
+        const {data} = await response.json()
+
+        dispatch({
+          type: 'GET_USER', 
+          payload: data,
+        })
+      }
+
+    }
+
   const handleClearUsers = () => {
     console.log('clear')
     dispatch({
@@ -57,6 +79,7 @@ export const GithubContextProvider = ({children}:any) => {
 
   return (<GithubContext.Provider value={{
     users: state.users,
+    // user: state.user,
     isLoading: state.isLoading,
     searchUsers,
     handleClearUsers,

@@ -1,6 +1,6 @@
-import { UsersArrayProps } from "../props/props"
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
+import { UsersArrayProps } from '../../context/github/GithubReducer';
 
 interface UserProps {
   user: UsersArrayProps;
@@ -22,7 +22,7 @@ const UserItem:FC<UserProps> = (props) => {
         <div>
           <h2 className="card-title">{user.login}</h2>
           <Link className='text-base-content text-opacity-40' 
-          to={`/users/${user.login}`}>
+          to={`/user/${user.login}`}>
             Visit Profile
           </Link>
         </div>

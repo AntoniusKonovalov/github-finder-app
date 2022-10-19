@@ -7,8 +7,8 @@ const Alert = () => {
   return ( 
     <>
        {alert != null && (
-       <p className="flex items-start mb-4 space-x-2">
-        <div className=''>
+       <p className="flex items-start ">
+        <div>
          {alert.type === 'error' && (
           <svg 
           fill='none'
