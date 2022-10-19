@@ -1,11 +1,12 @@
 import { createContext, useReducer } from 'react'
 import { UsersArrayProps } from '../../components/props/props'
-import githubReducer from './GithubReducer';
+import githubReducer, { User_LoaderState } from './GithubReducer';
 
 export type GithubContextType = {
   users: UsersArrayProps[];
   isLoading: boolean;
-  fetchUsers: Function;
+  searchUsers: Function;
+  handleClearUsers: Function;
 }
 
 const GithubContext = createContext<GithubContextType | null>(null)
@@ -15,40 +16,50 @@ const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN
 
 export const GithubContextProvider = ({children}:any) => {
 
-  // const [users, setUsers] = useState<UsersArrayProps[]>([{
-  //   id: null,
-  //   login: '',
-  //   avatar_url: '',
-  // }])
-  // const [isLoading, setIsLoading] = useState<boolean>(true)
-  const initialState = {
+  const initialState:User_LoaderState = {
     users: [],
-    isLoading: true
+    isLoading: false
   }
 
   const [state, dispatch] = useReducer(githubReducer, initialState) 
 
-  const fetchUsers = async() => {
-    const response = await fetch(`${GITHUB_URL}/users`,{
+  // Get search results
+  const searchUsers = async(text:string) => {
+    setLoading()
+    const params = new URLSearchParams({
+      q: text
+    })
+    const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
       headers: {
         Authorization: `token ${GITHUB_TOKEN}`
       }
     })
-
-    const data = await response.json()
-    // setUsers(data)
-    // setIsLoading(false)
+    const {items} = await response.json()
     dispatch({
       type: 'GET_USERS', 
-      payload: data,
+      payload: items,
     })
   }
 
+  const handleClearUsers = () => {
+    console.log('clear')
+    dispatch({
+      type: 'CLEAR_USERS',
+      payload: []
+    })
+  }
+
+    // Set loading
+    const setLoading = () => dispatch({
+      type: 'SET_LOADING',
+      payload: []
+    })
 
   return (<GithubContext.Provider value={{
     users: state.users,
-    isLoading,
-    fetchUsers,
+    isLoading: state.isLoading,
+    searchUsers,
+    handleClearUsers,
   }}>
     {children}
   </GithubContext.Provider>

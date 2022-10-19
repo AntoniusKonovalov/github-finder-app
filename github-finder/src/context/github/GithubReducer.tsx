@@ -1,15 +1,16 @@
 import { UsersArrayProps } from "../../components/props/props";
 
-type Action = {
+export type Action = {
   type: string;
+  payload: UsersArrayProps[];
 }
 
-interface userState {
-  user: UsersArrayProps;
+export interface User_LoaderState {
+  users: UsersArrayProps[];
   isLoading: boolean;
 }
 
-const githubReducer = (state:userState, action:Action) => {
+const githubReducer = (state:User_LoaderState, action:Action) => {
   switch(action.type) {
     case 'GET_USERS':
       return {
@@ -17,6 +18,16 @@ const githubReducer = (state:userState, action:Action) => {
         users: action.payload,
         isLoading: false
       }
+      case 'SET_LOADING':
+        return {
+          ...state,
+          isLoading: true
+        }
+      case 'CLEAR_USERS':
+        return {
+          ...state,
+          users: action.payload, 
+        }
     default: 
       return state
   }
