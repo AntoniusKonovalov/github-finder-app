@@ -6,7 +6,7 @@ export type Action = {
 }
 
 export interface UserProps{
-  login: string;
+  login?: string;
 }
 
 export interface UsersArrayProps {

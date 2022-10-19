@@ -1,12 +1,14 @@
 import { createContext, useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
-import githubReducer, { UsersArrayProps, User_LoaderState } from './GithubReducer';
+import { FaWindows } from 'react-icons/fa';
+import githubReducer, { UserProps, UsersArrayProps, User_LoaderState } from './GithubReducer';
 
 export type GithubContextType = {
   users: UsersArrayProps[];
+  user: UserProps;
   isLoading: boolean;
   searchUsers: Function;
   handleClearUsers: Function;
+  getUser: Function;
 }
 const GithubContext = createContext<GithubContextType | null>(null)
 
@@ -14,7 +16,6 @@ const GITHUB_URL = process.env.REACT_APP_GITHUB_URL
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN
 
 export const GithubContextProvider = ({children}:any) => {
-  const navigate = useNavigate()
   const initialState:User_LoaderState = {
     users: [],
     user: {},
@@ -30,9 +31,9 @@ export const GithubContextProvider = ({children}:any) => {
       q: text
     })
     const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`
-      }
+      // headers: {
+      //   Authorization: `token ${GITHUB_TOKEN}`
+      // }
     })
     const {items} = await response.json()
     dispatch({
@@ -43,6 +44,7 @@ export const GithubContextProvider = ({children}:any) => {
 
     // Get single user
     const getUser = async(login:string) => {
+      console.log('this is login', login)
       setLoading()
       const response = await fetch(`${GITHUB_URL}/users/${login}`, {
         headers: {
@@ -51,9 +53,11 @@ export const GithubContextProvider = ({children}:any) => {
       })
 
       if(response.status === 404) {
-        navigate('/notfound')
+        const win: Window = window;
+        win.location = ('notfound')
       } else {
         const {data} = await response.json()
+        console.log('hello', data)
 
         dispatch({
           type: 'GET_USER', 
@@ -64,7 +68,6 @@ export const GithubContextProvider = ({children}:any) => {
     }
 
   const handleClearUsers = () => {
-    console.log('clear')
     dispatch({
       type: 'CLEAR_USERS',
       payload: []
@@ -77,15 +80,17 @@ export const GithubContextProvider = ({children}:any) => {
       payload: []
     })
 
-  return (<GithubContext.Provider value={{
-    users: state.users,
-    // user: state.user,
-    isLoading: state.isLoading,
-    searchUsers,
-    handleClearUsers,
-  }}>
-    {children}
-  </GithubContext.Provider>
+  return (
+      <GithubContext.Provider value={{
+        users: state.users,
+        user: state.user,
+        isLoading: state.isLoading,
+        getUser,
+        searchUsers,
+        handleClearUsers,
+        }}>
+          {children}
+      </GithubContext.Provider>
   )
 }
 
