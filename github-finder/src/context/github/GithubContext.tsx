@@ -1,4 +1,5 @@
-import { createContext, useReducer } from 'react'
+import { createContext, useReducer } from 'react';
+import { useNavigate } from 'react-router-dom';
 import githubReducer, { UsersArrayProps, User_LoaderState } from './GithubReducer';
 
 export type GithubContextType = {
@@ -7,14 +8,13 @@ export type GithubContextType = {
   searchUsers: Function;
   handleClearUsers: Function;
 }
-
 const GithubContext = createContext<GithubContextType | null>(null)
 
 const GITHUB_URL = process.env.REACT_APP_GITHUB_URL
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN
 
 export const GithubContextProvider = ({children}:any) => {
-
+  const navigate = useNavigate()
   const initialState:User_LoaderState = {
     users: [],
     user: {},
@@ -51,7 +51,7 @@ export const GithubContextProvider = ({children}:any) => {
       })
 
       if(response.status === 404) {
-        window.location = '/notfound'
+        navigate('/notfound')
       } else {
         const {data} = await response.json()
 
