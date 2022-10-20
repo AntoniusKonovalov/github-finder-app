@@ -73,7 +73,7 @@ const githubReducer = (state:User_LoaderState, action:Action) => {
       case 'CLEAR_USERS':
         return {
           ...state,
-          users: action.payload, 
+          users: [], 
         }
     default: 
       return state
