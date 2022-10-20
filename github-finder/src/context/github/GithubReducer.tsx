@@ -1,8 +1,7 @@
 
-
 export type Action = {
   type: string;
-  payload: UsersArrayProps[];
+  payload: any;
 }
 
 export interface UserProps{
@@ -28,13 +27,21 @@ export interface UsersArrayProps {
   avatar_url: string;
 }
 
-export interface ReposProps {
-  url: string;
+export interface ReposUserProps {
+  id:number;
+  name: string;
+  description: string;
+  html_url: string;
+  forks: string;
+  open_issues: string;
+  watchers_count: string;
+  stargazers_count: string;
 }
+
 export interface User_LoaderState {
   users: UsersArrayProps[];
   user: UserProps | object;
-  repos: ReposProps[];
+  repos: ReposUserProps[];
   isLoading: boolean;
 }
 
@@ -50,6 +57,12 @@ const githubReducer = (state:User_LoaderState, action:Action) => {
         return {
           ...state,
           user: action.payload,
+          isLoading: false
+        }
+      case 'GET_REPOS':
+        return{
+          ...state,
+          repos: action.payload,
           isLoading: false
         }
       case 'SET_LOADING':

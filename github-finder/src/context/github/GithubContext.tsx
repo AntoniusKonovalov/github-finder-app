@@ -1,14 +1,16 @@
 import { createContext, useReducer } from 'react';
 import { FaWindows } from 'react-icons/fa';
-import githubReducer, { UserProps, UsersArrayProps, User_LoaderState } from './GithubReducer';
+import githubReducer, { ReposUserProps, UserProps, UsersArrayProps, User_LoaderState } from './GithubReducer';
 
 export type GithubContextType = {
   users: UsersArrayProps[];
   user: UserProps;
+  repos: ReposUserProps;
   isLoading: boolean;
   searchUsers: Function;
   handleClearUsers: Function;
   getUser: Function;
+  getUserRepos: Function;
 }
 const GithubContext = createContext<GithubContextType | null>(null)
 
@@ -65,8 +67,29 @@ export const GithubContextProvider = ({children}:any) => {
           payload: data,
         })
       }
-
     }
+
+  //Get user repos
+  const getUserRepos = async(login:string) => {
+    setLoading()
+
+    // @ts-ignore
+    const params = new URLSearchParams({
+      sort: 'created',
+      per_page: 10,
+    }) 
+
+    const response = await fetch(`${GITHUB_URL}/users/${login}/repos?${params}`, {
+      // headers: {
+      //   Authorization: `token ${GITHUB_TOKEN}`
+      // }
+    })
+    const data = await response.json()
+    dispatch({
+      type: 'GET_REPOS', 
+      payload: data,
+    })
+  }
 
   const handleClearUsers = () => {
     dispatch({
@@ -85,10 +108,12 @@ export const GithubContextProvider = ({children}:any) => {
       <GithubContext.Provider value={{
         users: state.users,
         user: state.user,
+        repos: state.repos,
         isLoading: state.isLoading,
         getUser,
         searchUsers,
         handleClearUsers,
+        getUserRepos,
         }}>
           {children}
       </GithubContext.Provider>

@@ -3,16 +3,18 @@ import { useContext, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import GithubContext, { GithubContextType } from '../context/github/GithubContext'
 import Spinner from '../components/shared/Spinner'
+import ReposUserList from '../components/repos/ReposUserList'
 
 
 const User = () => {
-  const {user, getUser, isLoading} =useContext(GithubContext) as GithubContextType
+  const {user, getUser, isLoading, getUserRepos, repos} =useContext(GithubContext) as GithubContextType
   const params = useParams()
   console.log(params.login)
 
   useEffect(() => {
     getUser(params.login)
-    // getUserRepos(params.login)
+    getUserRepos(params.login)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const {
@@ -160,6 +162,8 @@ const User = () => {
             </div>
           </div>
         </div>
+        {/* @ts-ignore */}
+        <ReposUserList repos={repos} />
       </div>
       
     </>
