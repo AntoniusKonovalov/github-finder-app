@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1, h2, h3, p {
+  color: rgb(235, 235, 235);
+}
+
+.btn  {
+  color: rgb(235, 235, 235);
+}
+
+#goBtn{
+  margin-right: -0.1rem;
+  margin-top: -0.1rem;
+  height: 4.2rem;
+}
+
+.custom-card-image .card.image-full:before {
+  border-radius: 0.5rem;
+  opacity: 0.45;
+}

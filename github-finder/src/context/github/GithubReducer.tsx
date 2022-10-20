@@ -6,8 +6,21 @@ export type Action = {
 }
 
 export interface UserProps{
+  name?: string;
+  type?: string;
+  avatar_url?: string;
+  location?: string;
+  bio?: string;
+  blog?: string;
+  twitter_username?: string;
   login?: string;
-}
+  html_url?: string;
+  followers?: string;
+  following?: string;
+  public_repos?: string;
+  public_gists?: string;
+  hireable?: boolean;
+} 
 
 export interface UsersArrayProps {
   id: number | null;

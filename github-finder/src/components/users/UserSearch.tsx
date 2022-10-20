@@ -36,7 +36,7 @@ const UserSearch = () => {
               input input-lg text-black"
               placeholder='Search'
               />
-              <button type="submit" className="absolute top-0 right-0 rounded-l-none w-36 btn btn-lg">Go</button>
+              <button id="goBtn" type="submit" className="absolute top-0 right-0 rounded-l-none w-36 btn btn-lg">Go</button>
             </div>
           </div>
         </form>
