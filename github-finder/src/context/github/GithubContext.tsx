@@ -19,6 +19,7 @@ export const GithubContextProvider = ({children}:any) => {
   const initialState:User_LoaderState = {
     users: [],
     user: {},
+    repos: [],
     isLoading: false
   }
 
@@ -31,9 +32,9 @@ export const GithubContextProvider = ({children}:any) => {
       q: text
     })
     const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`
-      }
+      // headers: {
+      //   Authorization: `token ${GITHUB_TOKEN}`
+      // }
     })
     const {items} = await response.json()
     dispatch({
@@ -47,9 +48,9 @@ export const GithubContextProvider = ({children}:any) => {
       console.log('this is login', login)
       setLoading()
       const response = await fetch(`${GITHUB_URL}/users/${login}`, {
-        headers: {
-          Authorization: `token ${GITHUB_TOKEN}`
-        }
+        // headers: {
+        //   Authorization: `token ${GITHUB_TOKEN}`
+        // }
       })
 
       if(response.status === 404) {

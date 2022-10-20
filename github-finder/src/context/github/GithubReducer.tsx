@@ -27,9 +27,14 @@ export interface UsersArrayProps {
   login: string;
   avatar_url: string;
 }
+
+export interface ReposProps {
+  url: string;
+}
 export interface User_LoaderState {
   users: UsersArrayProps[];
   user: UserProps | object;
+  repos: ReposProps[];
   isLoading: boolean;
 }
 
